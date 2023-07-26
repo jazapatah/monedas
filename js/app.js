@@ -16,6 +16,9 @@ let requestUrl = "https://api.exchangerate.host/latest?base=USD";
 /**
  * await dice que hay que esperar que toma la respuesta de la api requestUrl
  */
+
+// fetchRates();
+
 async function fetchRates(){
     let res = await fetch(requestUrl);
     rer = await res.json();
@@ -37,4 +40,32 @@ function populateOptions() {
     })
     // mostrar las opciones
     selects.forEach((s)=>(s.innerHTML = val));
+}
+
+/**
+ * 
+ * @param {Number} val valor de conversión
+ * @param {Number} fromCurr moneda inicial
+ * @param {Number} toCurr moneda a convertir
+ */
+// Crear la función para hacer la conversión
+function convert(val,fromCurr,toCurr) {
+    // declarar variables de ámbito local
+    let v = (val/rates[fromCurr])*rates[toCurr];
+    let v1 = v.toFixed(3);
+    // validar con if ternario
+    return v1 == 0.0 ? v1.toFixed(5): v1;
+}
+
+// función para los select
+function displayRate() {
+    // declarar variables en el ámbito local
+    let v1 = sel1.value;
+    let v2 = sel2.value;
+    
+    let val = convert(1,v1,v2);
+
+    // imprimir en elemento html
+    rate1.innerHTML = `1 ${v1} equals `;
+    rate1.innerHTML = `${val} ${v2} `;
 }
