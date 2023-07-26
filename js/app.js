@@ -12,17 +12,21 @@ let inpt2 = inputs[1];
 let rates = {};
 let requestUrl = "https://api.exchangerate.host/latest?base=USD";
 
-// Funcion async
+// Función async
 /**
  * await dice que hay que esperar que toma la respuesta de la api requestUrl
  */
 
-// fetchRates();
+// llamar la función fetchRates
+fetchRates();
 
 async function fetchRates(){
     let res = await fetch(requestUrl);
-    rer = await res.json();
-    rates = res.rates();
+    res = await res.json();
+    rates = res.rates;
+
+    // utilizar la función populateOptions
+    populateOptions();
 }
 
 // Función tradicional
@@ -67,5 +71,38 @@ function displayRate() {
 
     // imprimir en elemento html
     rate1.innerHTML = `1 ${v1} equals `;
-    rate1.innerHTML = `${val} ${v2} `;
+    rate2.innerHTML = `${val} ${v2} `;
 }
+
+// listener y el evento click
+resultBtn.addEventListener("click", ()=>{
+    let fromCurr = sel1.value;
+    let fromVal = parseFloat(inpt1.value);
+    let toCurr = sel2.value;
+
+    // validar si hay un valor
+    if (isNaN(fromVal)) {
+        alert('Ingresa un número, por favor');
+    } else {
+        let cVal =convert(fromVal,fromCurr,toCurr);
+        inpt2.value = cVal;
+    }
+})
+
+selects.forEach(s => s.addEventListener("change", displayRate));
+
+document.querySelector('.swap').addEventListener("click", () => {
+    let in1 = inpt1.value;
+    let in2 = inpt2.value;
+    let op1 = sel1.value;
+    let op2 = sel2.value;
+
+    inpt2.value = in1;   
+    inpt1.value = in2;
+
+    sel2.value = op1;
+    sel1.value = op2;
+    
+    // Llamar la función
+    displayRate();
+})
